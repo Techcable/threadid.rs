@@ -25,6 +25,7 @@ use crate::utils::sync::{Mutex, MutexGuard};
 /// Currently [`LiveThreadId::to_int`] can be zero, reducing wasted indexes.
 #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[must_use]
 #[repr(transparent)]
 pub struct LiveThreadId {
     index: NonMaxUsize,
@@ -93,6 +94,7 @@ impl LiveThreadId {
     ///
     /// This is an alias for [`Self::to_int`].
     #[inline]
+    #[must_use]
     pub fn index(self) -> usize {
         self.index.get()
     }
@@ -105,6 +107,7 @@ impl LiveThreadId {
     /// The index is guaranteed to fit into a `usize`,
     /// because there cannot be more live threads then memory addresses.
     #[inline]
+    #[must_use]
     pub fn to_int(self) -> usize {
         self.index.get()
     }
@@ -118,7 +121,7 @@ unsafe impl bytemuck::NoUninit for LiveThreadId {}
 #[cfg(feature = "slog")]
 impl slog::Value for LiveThreadId {
     fn serialize(&self, _record: &slog::Record, key: slog::Key, serializer: &mut dyn slog::Serializer) -> slog::Result {
-        serializer.emit_arguments(key, &format_args!("{:?}", self))
+        serializer.emit_arguments(key, &format_args!("{self:?}"))
     }
 }
 

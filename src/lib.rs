@@ -36,7 +36,11 @@
     clippy::alloc_instead_of_core,
     clippy::undocumented_unsafe_blocks
 )]
-#![warn(clippy::multiple_unsafe_ops_per_block)]
+#![warn(clippy::multiple_unsafe_ops_per_block, clippy::pedantic)]
+#![allow(
+    // stylistic
+    clippy::single_match_else,
+)]
 
 #[cfg(not(any(feature = "nightly", feature = "std")))]
 compile_error!("Either the `nightly` or `std` feature must be enabled for this crate to work");
@@ -98,6 +102,7 @@ mod sealed {
 ///
 /// Convenience method for calling [`IThreadId::current`].
 #[inline]
+#[must_use]
 pub fn current<T: IThreadId>() -> T {
     T::current()
 }

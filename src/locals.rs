@@ -34,6 +34,7 @@ pub mod nightly {
             func(&self.value)
         }
         #[inline]
+        #[allow(clippy::unnecessary_wraps)]
         pub fn try_with<F: FnOnce(&T) -> R, R>(&self, func: F) -> Result<R, AccessError> {
             Ok(func(&self.value))
         }

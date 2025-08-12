@@ -8,6 +8,7 @@ use crate::UniqueThreadId;
 ///
 /// Uses the name if possible and the id where it is not.
 #[derive(Clone)]
+#[must_use]
 pub struct DebugThreadId {
     /// This is really an `Arc<ThreadInfo>`,
     /// so it is cheap to Clone and fine if it lives beyond thread death
@@ -28,6 +29,7 @@ impl DebugThreadId {
 
     /// Get the name of the thread, or `None` if not available.
     #[inline]
+    #[must_use]
     pub fn name(&self) -> Option<&'_ str> {
         self.info.name()
     }
@@ -42,7 +44,7 @@ impl Display for DebugThreadId {
     fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}", self.id.to_int())?;
         if let Some(name) = self.name() {
-            write!(f, "({:?})", name)?;
+            write!(f, "({name:?})")?;
         }
         Ok(())
     }
@@ -51,9 +53,9 @@ impl Debug for DebugThreadId {
     fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
         write!(f, "ThreadId({}", self.id.to_int())?;
         if let Some(name) = self.name() {
-            write!(f, ", {:?})", name)?;
+            write!(f, ", {name:?})")?;
         } else {
-            f.write_str(")")?
+            f.write_str(")")?;
         }
         Ok(())
     }
@@ -61,7 +63,7 @@ impl Debug for DebugThreadId {
 #[cfg(feature = "slog")]
 impl slog::Value for DebugThreadId {
     fn serialize(&self, _record: &slog::Record, key: slog::Key, serializer: &mut dyn slog::Serializer) -> slog::Result {
-        serializer.emit_arguments(key, &format_args!("{}", self))
+        serializer.emit_arguments(key, &format_args!("{self}"))
     }
 }
 #[cfg(feature = "serde")]

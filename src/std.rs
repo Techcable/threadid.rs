@@ -17,6 +17,7 @@ fast_thread_local! {
 /// which requires cloning a [`std::sync::Arc`].
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "std")))]
+#[must_use]
 #[repr(transparent)]
 pub struct StdThreadId(pub ThreadId);
 impl StdThreadId {
@@ -104,6 +105,6 @@ impl Equivalent<ThreadId> for StdThreadId {
 #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "slog")))]
 impl slog::Value for StdThreadId {
     fn serialize(&self, _record: &slog::Record, key: slog::Key, serializer: &mut dyn slog::Serializer) -> slog::Result {
-        serializer.emit_arguments(key, &format_args!("{:?}", self))
+        serializer.emit_arguments(key, &format_args!("{self:?}"))
     }
 }

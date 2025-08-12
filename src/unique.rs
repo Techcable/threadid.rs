@@ -7,7 +7,7 @@ fast_thread_local! {
     static THREAD_ID: core::cell::Cell<Option<UniqueThreadId>> = core::cell::Cell::new(None);
 }
 
-/// A globally unique ThreadId.
+/// A globally unique thread id.
 ///
 /// Very similar to [`std::thread::ThreadId`],
 /// except that it has less lookup overhead and gives access to the integer value.
@@ -19,6 +19,7 @@ fast_thread_local! {
 /// this may change in the future if other niche types like `NonMax` become stabilized.
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, Ord, PartialOrd)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[must_use]
 #[repr(transparent)]
 pub struct UniqueThreadId(NonZeroU64);
 impl UniqueThreadId {
@@ -47,6 +48,7 @@ impl UniqueThreadId {
 
     /// Convert a [`UniqueThreadId`] into an integer value.
     #[inline]
+    #[must_use]
     pub fn to_int(&self) -> u64 {
         self.0.get()
     }
