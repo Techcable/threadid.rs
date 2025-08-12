@@ -1,0 +1,66 @@
+[package]
+name = "threadid"
+description = "Fast and flexible thread identifiers"
+version = "0.1.0-alpha.0"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/Techcable/threadid.rs"
+edition = "2021"
+# 1.56 - edition 2021
+# 1.59 - const syntax for thread locals
+# 1.61 - dep:foo and foo?/std syntax
+# 1.63 - const Mutex::new
+rust-version = "1.63"
+
+[dependencies]
+cfg-if = "1"
+equivalent = "1"
+portable-atomic = { version = "1", features = ["require-cas"] }
+nonmax = { version = "0.5", default-features = false }
+# optional
+parking_lot = { version = "0.12", optional = true }
+serde = { version = "1", optional = true, features = ["derive"] }
+slog = { version = "2.6", optional = true, default-features = false }
+bytemuck = { version = "1.23", optional = true, features = ["derive"] }
+
+[dev-dependencies]
+# criterion = "0.7"
+crossbeam-utils = "0.8"
+
+[[bench]]
+name = "access"
+required-features = []
+harness = false
+test = false
+
+[features]
+default = ["std"]
+# Enables features which require the standard library
+std = ["alloc", "slog?/std"]
+# Enables features which require the `alloc` crate
+alloc = []
+# Enables nightly-only optimizations and features
+nightly = ["parking_lot?/nightly"]
+# Enables serde serialization for most types
+#
+# Deserialization can not be reasonbly implemented
+serde = ["dep:serde", "nonmax/serde"]
+# Implements slog::Value for most types
+slog = ["dep:slog"]
+# Implement bytemuck traits for applicable types
+bytemuck = ["dep:bytemuck"]
+# Use nightly-specific documentation features
+nightly-docs = []
+# Use parking_lot for synchronization
+#
+# Since synchronization is off the fast path,
+# this is unlikely to affect performance.
+# However, it may be useful if std::sync::Mutex interacts poorly
+# with thread destructors
+parking_lot = ["dep:parking_lot"]
+# Make the `UniqueThreadId` type wrap `std::thread::ThreadId`
+#
+# This currently requires the `nightly` feature,
+# along with the `std` feature.
+# By default, this is implicitly enabled on nightly + std,
+# this feature only makes the requirement explicit.
+unique-wrap-std = ["std"]

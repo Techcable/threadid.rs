@@ -1,0 +1,9 @@
+[default]
+locale = "en-us"
+unicode = false
+
+[files]
+ignore-hidden = false
+extend-exclude = [
+    ".git", # needed because we 'ignore-hidden'
+]
