@@ -6,7 +6,9 @@ format: && spellcheck
 check: check-format
     -just spellcheck
     cargo clippy
+    cargo doc --no-deps
     cargo rdme --check
+    lychee README.md
 
 check-format: && spellcheck
     taplo format

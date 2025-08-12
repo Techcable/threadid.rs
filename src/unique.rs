@@ -40,6 +40,7 @@ impl UniqueThreadId {
     /// Requires the `unique-wrap-std` feature to be enabled,
     /// because otherwise the thread ids could differ.
     #[cfg(feature = "unique-wrap-std")]
+    #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "unique-wrap-std")))]
     #[inline]
     pub fn from_std(id: impl Into<std::thread::ThreadId>) -> Self {
         // SAFETY: Enabling the feature guarantees ids are equivalent

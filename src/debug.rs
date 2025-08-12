@@ -1,12 +1,14 @@
-//! Provides debug info for a thread.
+//! Identifies a thread in a form useful for debugging.
 
 use core::fmt::{Debug, Display, Formatter};
 
 use crate::UniqueThreadId;
 
-/// Identifies a thread, in a form useful for debugging.
+/// Identifies a thread in a form useful for debugging.
 ///
-/// Uses the name if possible and the id where it is not.
+/// Uses the [name] if possible and the id where it is not.
+///
+/// [name]: std::thread::Thread::name
 #[derive(Clone)]
 #[must_use]
 pub struct DebugThreadId {
