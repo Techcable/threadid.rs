@@ -20,7 +20,7 @@ nonmax = { version = "0.5", default-features = false }
 parking_lot = { version = "0.12", optional = true }
 serde = { version = "1", optional = true, features = ["derive"] }
 slog = { version = "2.6", optional = true, default-features = false }
-bytemuck = { version = "1.23", optional = true, features = ["derive"] }
+bytemuck = { version = "1.23", optional = true }
 
 [dev-dependencies]
 # criterion = "0.7"
