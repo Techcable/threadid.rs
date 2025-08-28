@@ -43,6 +43,7 @@ unsafe impl crate::IThreadId for StdThreadId {
     }
 }
 #[cfg(feature = "bytemuck")]
+#[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "bytemuck")))]
 // SAFETY: We are #[repr(transparent)]
 unsafe impl bytemuck::TransparentWrapper<ThreadId> for StdThreadId {}
 // SAFETY: stdlib guarantees that threadid is unique

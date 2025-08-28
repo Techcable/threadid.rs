@@ -113,9 +113,11 @@ unsafe impl crate::IThreadId for UniqueThreadId {
     }
 }
 #[cfg(feature = "bytemuck")]
+#[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "bytemuck")))]
 // SAFETY: Wraps a NonZero
 unsafe impl bytemuck::ZeroableInOption for UniqueThreadId {}
 #[cfg(feature = "bytemuck")]
+#[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "bytemuck")))]
 // SAFETY: Wraps a NonZero
 unsafe impl bytemuck::NoUninit for UniqueThreadId {}
 impl From<UniqueThreadId> for u64 {

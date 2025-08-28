@@ -75,6 +75,7 @@ mod cell {
 macro_rules! simple_serde_serialize {
     ($target:ident, |$this:ident| $to_inner:expr) => {
         #[cfg(feature = "serde")]
+        #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "serde")))]
         impl serde::Serialize for $target {
             fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
                 let $this = self;

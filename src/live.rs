@@ -113,12 +113,15 @@ impl LiveThreadId {
 }
 simple_serde_serialize!(LiveThreadId, |this| this.to_int());
 #[cfg(feature = "bytemuck")]
+#[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "bytemuck")))]
 // SAFETY: We wrap a NonMax, which has the same niche as NonZero
 unsafe impl bytemuck::ZeroableInOption for LiveThreadId {}
 #[cfg(feature = "bytemuck")]
+#[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "bytemuck")))]
 // SAFETY: A NonMax is equivalent to a NonZero
 unsafe impl bytemuck::NoUninit for LiveThreadId {}
 #[cfg(feature = "slog")]
+#[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "slog")))]
 impl slog::Value for LiveThreadId {
     fn serialize(&self, _record: &slog::Record, key: slog::Key, serializer: &mut dyn slog::Serializer) -> slog::Result {
         serializer.emit_arguments(key, &format_args!("{self:?}"))
