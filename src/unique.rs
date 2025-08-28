@@ -43,8 +43,15 @@ impl UniqueThreadId {
     #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "unique-wrap-std")))]
     #[inline]
     pub fn from_std(id: impl Into<std::thread::ThreadId>) -> Self {
-        // SAFETY: Enabling the feature guarantees ids are equivalent
-        unsafe { Self::from_int(id.into().as_u64().get()) }
+        cfg_if::cfg_if! {
+            if #[cfg(feature="nightly")] {
+                // SAFETY: Enabling the feature guarantees ids are equivalent
+                unsafe { Self::from_int(id.into().as_u64().get()) }
+            } else {
+                let _ = id;
+                unreachable!("unique-wrap-std not possible without nightly features")
+            }
+        }
     }
 
     /// Convert a [`UniqueThreadId`] into an integer value.
@@ -82,7 +89,7 @@ impl UniqueThreadId {
             if #[cfg(all(feature = "std", feature = "nightly"))] {
                 UniqueThreadId(crate::StdThreadId::current().0.as_u64())
             } else if #[cfg(feature = "unique-wrap-std")] {
-                compile_error!("requires nightly + std")
+                compile_error!("The `unique-wrap-std` feature requires the `nightly` feature to be enabled")
             } else {
                 THREAD_ID.with(|cell| {
                     match cell.get() {

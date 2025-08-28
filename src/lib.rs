@@ -50,10 +50,7 @@
 )]
 
 #[cfg(not(any(feature = "nightly", feature = "std")))]
-compile_error!("Either the `nightly` or `std` feature must be enabled for this crate to work");
-
-#[cfg(all(feature = "unique-wrap-std", not(feature = "nightly")))]
-compile_error!("The `unique-wrap-std` feature currently requires the `nightly` feature to be enabled");
+compile_error!("The `threadid` crate requires at least one of the `nightly` or `std` features");
 
 #[cfg(feature = "alloc")]
 extern crate alloc;
@@ -73,6 +70,7 @@ pub use self::std::StdThreadId;
 #[macro_use]
 mod locals;
 #[cfg(feature = "std")]
+#[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "std")))]
 pub mod debug;
 #[cfg(feature = "std")]
 #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "std")))]

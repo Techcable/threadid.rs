@@ -13,12 +13,15 @@ macro_rules! fast_thread_local {
                     static $var: $tp = const { $init };)*
                 }
             } else {
-                compile_error!("Either the `std` or `nightly` feature must be enabled");
+                $(
+                static $var: $crate::locals::dummy::DummyLocalKey<$tp> = $crate::locals::dummy::DummyLocalKey::new($init);
+                )*
             }
         }
     };
 }
 
+/// Version of [`std::thread::LocalKey`] using the nightly `#[thread_local]` attribute.
 #[cfg(feature = "nightly")]
 #[cfg_attr(not(feature = "std"), allow(dead_code))]
 pub mod nightly {
@@ -40,4 +43,35 @@ pub mod nightly {
         }
     }
     type AccessError = core::convert::Infallible;
+}
+
+/// Dummy version of [`std::thread::LocalKey`] to avoid duplicate compilation errors.
+#[cfg(not(any(feature = "nightly", feature = "std")))]
+pub mod dummy {
+    use core::mem::ManuallyDrop;
+
+    pub struct DummyLocalKey<T> {
+        _value: ManuallyDrop<T>,
+    }
+    // always Sync because we don't give any access
+    unsafe impl<T> Sync for DummyLocalKey<T> {}
+    impl<T: 'static> DummyLocalKey<T> {
+        pub const fn new(value: T) -> Self {
+            DummyLocalKey {
+                _value: ManuallyDrop::new(value),
+            }
+        }
+        #[inline]
+        pub fn with<F: FnOnce(&T) -> R, R>(&self, func: F) -> R {
+            let _ = func;
+            unimplemented!("thread local unsupported")
+        }
+        #[inline]
+        #[allow(clippy::unnecessary_wraps)]
+        pub fn try_with<F: FnOnce(&T) -> R, R>(&self, func: F) -> Result<R, AccessError> {
+            let _ = func;
+            Err("thread local unsupported")
+        }
+    }
+    type AccessError = &'static str;
 }
