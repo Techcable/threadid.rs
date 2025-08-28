@@ -5,12 +5,16 @@ use std::collections::HashSet;
 use std::sync::{Barrier, Mutex};
 
 use crossbeam_utils::thread;
-use threadid::{IThreadId, LiveThreadId, StdThreadId, UniqueThreadId};
+use threadid::{IThreadId, UniqueThreadId};
+#[cfg(feature = "std")]
+use threadid::{LiveThreadId, StdThreadId};
 
 #[test]
 fn death_reuse() {
     let seen_unique_ids = Mutex::new(HashSet::<UniqueThreadId>::new());
+    #[cfg(feature = "std")]
     let seen_std_ids = Mutex::new(HashSet::<StdThreadId>::new());
+    #[cfg(feature = "std")]
     let seen_live_ids = Mutex::new(HashSet::<LiveThreadId>::new());
     fn add_new<T: IThreadId>(lock: &Mutex<HashSet<T>>) {
         let id = threadid::current();
@@ -26,8 +30,11 @@ fn death_reuse() {
         }
     }
     add_new(&seen_unique_ids);
-    add_new(&seen_std_ids);
-    add_new(&seen_live_ids);
+    #[cfg(feature = "std")]
+    {
+        add_new(&seen_std_ids);
+        add_new(&seen_live_ids);
+    }
     {
         let start = Barrier::new(2);
         let end = Barrier::new(2);
@@ -35,15 +42,21 @@ fn death_reuse() {
             let t1 = scope.spawn(|_scope| {
                 start.wait();
                 add_new(&seen_unique_ids);
-                add_new(&seen_std_ids);
-                add_new(&seen_live_ids);
+                #[cfg(feature = "std")]
+                {
+                    add_new(&seen_std_ids);
+                    add_new(&seen_live_ids);
+                }
                 end.wait();
             });
             let t2 = scope.spawn(|_scope| {
                 start.wait();
                 add_new(&seen_unique_ids);
-                add_new(&seen_std_ids);
-                add_new(&seen_live_ids);
+                #[cfg(feature = "std")]
+                {
+                    add_new(&seen_std_ids);
+                    add_new(&seen_live_ids);
+                }
                 end.wait();
             });
             t1.join().unwrap_or_else(|payload| propagate_panic(payload));
@@ -56,9 +69,12 @@ fn death_reuse() {
         scope
             .spawn(|_scope| {
                 add_new(&seen_unique_ids);
-                add_new(&seen_std_ids);
-                let live_id: LiveThreadId = threadid::current();
-                assert!(seen_live_ids.lock().unwrap().contains(&live_id));
+                #[cfg(feature = "std")]
+                {
+                    add_new(&seen_std_ids);
+                    let live_id: LiveThreadId = threadid::current();
+                    assert!(seen_live_ids.lock().unwrap().contains(&live_id));
+                }
             })
             .join()
             .unwrap_or_else(|payload| propagate_panic(payload));
