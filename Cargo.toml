@@ -64,3 +64,6 @@ parking_lot = ["dep:parking_lot"]
 # By default, this is implicitly enabled on nightly + std,
 # this feature only makes the requirement explicit.
 unique-wrap-std = ["std"]
+
+[package.metadata.docs.rs]
+all-features = true
