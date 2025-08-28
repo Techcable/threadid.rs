@@ -72,3 +72,15 @@ mod cell {
     // SAFETY: Fine to send because old thread loses access
     unsafe impl<T> Send for OnceCell<T> {}
 }
+macro_rules! simple_serde_serialize {
+    ($target:ident, |$this:ident| $to_inner:expr) => {
+        #[cfg(feature = "serde")]
+        impl serde::Serialize for $target {
+            fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+                let $this = self;
+                let value = $to_inner;
+                serde::Serialize::serialize(&value, serializer)
+            }
+        }
+    };
+}

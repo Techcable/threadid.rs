@@ -68,6 +68,8 @@ pub use unique::UniqueThreadId;
 pub use self::std::StdThreadId;
 
 #[macro_use]
+mod utils;
+#[macro_use]
 mod locals;
 #[cfg(feature = "std")]
 #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "std")))]
@@ -79,7 +81,6 @@ pub mod live;
 #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "std")))]
 pub mod std;
 pub mod unique;
-mod utils;
 
 /// Defines methods common to all thread ids.
 ///

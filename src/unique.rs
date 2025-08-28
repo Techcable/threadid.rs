@@ -18,7 +18,6 @@ fast_thread_local! {
 /// While the current value is a [`core::num::NonZero`],
 /// this may change in the future if other niche types like `NonMax` become stabilized.
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, Ord, PartialOrd)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[must_use]
 #[repr(transparent)]
 pub struct UniqueThreadId(NonZeroU64);
@@ -105,6 +104,7 @@ impl UniqueThreadId {
         }
     }
 }
+simple_serde_serialize!(UniqueThreadId, |this| this.to_int());
 // SAFETY: Unique across all threads that have ever existed
 unsafe impl crate::IThreadId for UniqueThreadId {
     #[inline]

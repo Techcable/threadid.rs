@@ -24,7 +24,6 @@ use crate::utils::sync::{Mutex, MutexGuard};
 /// It is guaranteed that `Option<LiveThreadId>` has the same representation as `LiveThreadId`.
 /// Currently [`LiveThreadId::to_int`] can be zero, reducing wasted indexes.
 #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[must_use]
 #[repr(transparent)]
 pub struct LiveThreadId {
@@ -112,6 +111,7 @@ impl LiveThreadId {
         self.index.get()
     }
 }
+simple_serde_serialize!(LiveThreadId, |this| this.to_int());
 #[cfg(feature = "bytemuck")]
 // SAFETY: We wrap a NonMax, which has the same niche as NonZero
 unsafe impl bytemuck::ZeroableInOption for LiveThreadId {}

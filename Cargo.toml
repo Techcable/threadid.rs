@@ -18,7 +18,7 @@ portable-atomic = { version = "1", features = ["require-cas"] }
 nonmax = { version = "0.5", default-features = false }
 # optional
 parking_lot = { version = "0.12", optional = true }
-serde = { version = "1", optional = true, features = ["derive"] }
+serde = { version = "1", optional = true }
 slog = { version = "2.6", optional = true, default-features = false }
 bytemuck = { version = "1.23", optional = true }
 
@@ -46,7 +46,7 @@ alloc = []
 nightly = ["parking_lot?/nightly"]
 # Enables serde serialization for most types
 #
-# Deserialization can not be reasonbly implemented
+# Deserialization can not be reasonably implemented
 serde = ["dep:serde", "nonmax/serde"]
 # Implements slog::Value for most types
 slog = ["dep:slog"]
