@@ -26,6 +26,10 @@ bytemuck = { version = "1.23", optional = true, features = ["derive"] }
 # criterion = "0.7"
 crossbeam-utils = "0.8"
 
+[[example]]
+name = "thread_name"
+required-features = ["std"]
+
 [[bench]]
 name = "access"
 required-features = []
