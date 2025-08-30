@@ -1,7 +1,7 @@
 [package]
 name = "threadid"
 description = "Fast and flexible thread identifiers"
-version = "0.1.0-alpha.1"
+version = "0.1.0"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/Techcable/threadid.rs"
 edition = "2021"
@@ -10,6 +10,8 @@ edition = "2021"
 # 1.61 - dep:foo and foo?/std syntax
 # 1.63 - const Mutex::new
 rust-version = "1.63"
+categories = ["concurrency", "development-tools::debugging", "no-std", "no-std::no-alloc"]
+keywords = ["threadid", "tid", "name"]
 
 [dependencies]
 cfg-if = "1"
