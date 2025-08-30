@@ -23,18 +23,11 @@ slog = { version = "2.6", optional = true, default-features = false }
 bytemuck = { version = "1.23", optional = true }
 
 [dev-dependencies]
-criterion = "0.7"
 crossbeam-utils = "0.8"
 
 [[example]]
 name = "thread_name"
 required-features = ["std"]
-
-[[bench]]
-name = "access"
-required-features = []
-harness = false
-test = false
 
 [features]
 default = ["std"]
@@ -71,3 +64,7 @@ unique-wrap-std = ["std"]
 
 [package.metadata.docs.rs]
 all-features = true
+
+[workspace]
+members = [".", "benchmarks"]
+resolver = "2"
