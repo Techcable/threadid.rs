@@ -163,9 +163,12 @@ jobs:
             ~/.cargo/bin/cargo-rdme
           key: ${{ runner.os }}-binary-cargo-rdme
       - name: Install cargo-rdme
+        shell: bash
+        # NOTE: This doesn't worry about installing updates
         run: |
-          cargo install cargo-rdme
+          if not test -f "~/.cargo/bin/cargo-rdme"; then
+            cargo install cargo-rdme
+          fi
       - name: Run cargo-rdme
         run: |
-          cargo install cargo-rdme
           cargo rdme --check
