@@ -1,3 +1,5 @@
+#![allow(clippy::redundant_closure)] // slightly cleaner
+
 use criterion::{Criterion, criterion_group, criterion_main};
 use threadid::{LiveThreadId, StdThreadId, UniqueThreadId};
 
