@@ -166,7 +166,7 @@ jobs:
         shell: bash
         # NOTE: This doesn't worry about installing updates
         run: |
-          if not test -f "~/.cargo/bin/cargo-rdme"; then
+          if test ! -f "$HOME/.cargo/bin/cargo-rdme"; then
             cargo install cargo-rdme
           fi
       - name: Run cargo-rdme
