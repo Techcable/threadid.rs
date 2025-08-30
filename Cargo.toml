@@ -23,7 +23,7 @@ slog = { version = "2.6", optional = true, default-features = false }
 bytemuck = { version = "1.23", optional = true }
 
 [dev-dependencies]
-# criterion = "0.7"
+criterion = "0.7"
 crossbeam-utils = "0.8"
 
 [[example]]
