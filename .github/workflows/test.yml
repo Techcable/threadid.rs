@@ -78,7 +78,7 @@ jobs:
         # NOTE: Running --all-targets does not include doc tests
         # Does not compile benchmarks because they break on MSRV. Still checked by clippy
         run: |
-          cargo test --all --verbose --no-default-features --features "${{ matrix.features }}" --exclude "benchmarks"
+          cargo test --all --verbose --no-default-features --features "${{ matrix.features }}" --exclude "threadid-benchmarks"
 
   clippy:
     # Only run on PRs if the source branch is on someone else's repo
