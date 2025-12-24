@@ -4,12 +4,15 @@ description = "Benchmarks for the threadid crate"
 version = "0.0.0"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/Techcable/threadid.rs"
-publish = false  # internal use only
+publish = false # internal use only
 edition = "2021"
 
 [dev-dependencies]
 threadid.path = ".."
 criterion = "0.8"
+
+[build-dependencies]
+rustversion = "1"
 
 [[bench]]
 name = "access"

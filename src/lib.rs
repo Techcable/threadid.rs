@@ -31,6 +31,8 @@
     feature(
         // used to make UniqueThreadId match std::thread::ThreadId
         thread_id_value,
+        // used to quickly access the std thread id
+        current_thread_id,
     )
 )]
 #![cfg_attr(feature = "nightly-docs", feature(doc_cfg))]

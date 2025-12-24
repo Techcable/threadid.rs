@@ -1,11 +1,14 @@
 //! Wraps [`std::thread::ThreadId`], providng faster lookup.
 use core::borrow::Borrow;
+#[cfg(not(feature = "nightly"))]
 use core::cell::Cell;
 use core::ops::Deref;
 use std::thread::ThreadId;
 
+use cfg_if::cfg_if;
 use equivalent::Equivalent;
 
+#[cfg(not(feature = "nightly"))]
 fast_thread_local! {
     static STD_TID: Cell<Option<StdThreadId>> = Cell::new(None);
 }
@@ -24,14 +27,20 @@ impl StdThreadId {
     /// Lookup the [`std::thread::ThreadId`] of the current thread.
     #[inline]
     pub fn current() -> Self {
-        STD_TID.with(|cell| match cell.get() {
-            None => {
-                let new_id = Self::acquire();
-                cell.set(Some(new_id));
-                new_id
+        cfg_if! {
+            if #[cfg(feature = "nightly")] {
+                StdThreadId(std::thread::current_id())
+            } else {
+                STD_TID.with(|cell| match cell.get() {
+                    None => {
+                        let new_id = Self::acquire();
+                        cell.set(Some(new_id));
+                        new_id
+                    }
+                    Some(existing) => existing,
+                })
             }
-            Some(existing) => existing,
-        })
+        }
     }
 }
 #[cfg_attr(feature = "nightly-docs", doc(cfg(feature = "std")))]
@@ -55,6 +64,7 @@ unsafe impl crate::IThreadId for ThreadId {
 }
 impl StdThreadId {
     #[cold]
+    #[cfg(not(feature = "nightly"))]
     fn acquire() -> StdThreadId {
         StdThreadId(std::thread::current().id())
     }
