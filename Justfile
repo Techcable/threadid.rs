@@ -16,8 +16,8 @@ check-format: && spellcheck
 
 spellcheck:
     typos
-    git log | typos -
+    git log origin/master..HEAD | typos -
 
 fix-spelling:
     typos --write-changes
-    git log | typos -
+    git log origin/master..HEAD | typos -
