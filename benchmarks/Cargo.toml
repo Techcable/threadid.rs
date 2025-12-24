@@ -9,8 +9,7 @@ edition = "2021"
 
 [dev-dependencies]
 threadid.path = ".."
-criterion = "0.7"
-crossbeam-utils = "0.8"
+criterion = "0.8"
 
 [[bench]]
 name = "access"
