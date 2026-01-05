@@ -90,7 +90,7 @@ jobs:
       matrix:
         rust:
           # in hardcoded versions, warnings will fail the build
-          - 1.89
+          - 1.92
           # in auto-updated versions, warnings will not fail the build
           - stable
           - nightly
